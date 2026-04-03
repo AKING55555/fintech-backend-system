@@ -158,7 +158,7 @@ server.js
 
 ### Base URL
 
-http://localhost:5000
+[http://localhost:5000
 
 
 ---
@@ -272,3 +272,117 @@ Test Viewer access (read-only)
 ✅ Conclusion
 
 This project demonstrates a scalable backend system with role-based access, financial data management, and real-time ana
+](http://localhost:5000
+
+
+---
+
+## 🔐 Authentication
+
+### Login
+
+POST /api/auth/login
+
+
+**Request Body:**
+```json
+{
+  "email": "admin@test.com",
+  "password": "123456"
+}
+
+Response:
+
+{
+  "user": { ... },
+  "token": "JWT_TOKEN"
+}
+
+👉 Save this token for protected routes.
+
+👑 Admin Setup
+
+Default Admin (Seeded):
+
+Email: admin@test.com  
+Password: 123456
+Steps:
+Start server → admin auto-created
+Login using /api/auth/login
+Copy JWT token
+👥 User Management (Admin Only)
+Create User
+POST /api/users
+
+Headers:
+
+Authorization: Bearer <ADMIN_TOKEN>
+Create Analyst:
+{
+  "name": "Analyst One",
+  "email": "analyst@test.com",
+  "password": "123456",
+  "role": "analyst"
+}
+Create Viewer:
+{
+  "name": "Viewer One",
+  "email": "viewer@test.com",
+  "password": "123456",
+  "role": "viewer"
+}
+💰 Financial Records APIs
+Create Record (Admin Only)
+POST /api/records
+
+Headers:
+
+Authorization: Bearer <ADMIN_TOKEN>
+
+Body:
+
+{
+  "amount": 5000,
+  "type": "income",
+  "category": "salary",
+  "notes": "monthly salary"
+}
+Get Records (All Roles)
+GET /api/records
+
+Headers:
+
+Authorization: Bearer <TOKEN>
+
+Query Params:
+
+type
+category
+startDate
+endDate
+page
+limit
+
+Example:
+
+/api/records?type=income&category=salary&page=1
+Update Record (Admin Only)
+PUT /api/records/:id
+Delete Record (Admin Only)
+DELETE /api/records/:id
+📊 Dashboard API
+Get Summary
+GET /api/dashboard/summary
+
+Headers:
+
+Authorization: Bearer <ADMIN or ANALYST TOKEN>
+🧪 Testing Flow
+Login as Admin
+Create Analyst & Viewer
+Add financial records
+Test Analyst access (records + dashboard)
+Test Viewer access (read-only)
+✅ Conclusion
+
+This project demonstrates a scalable backend system with role-based access, financial data management, and real-time ana)
