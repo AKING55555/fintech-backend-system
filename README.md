@@ -26,7 +26,7 @@ This project simulates a real-world backend with controlled access, structured a
 ---
 
 ### 💰 Financial Records
-- Create, Read, Update, Delete (CRUD)
+- Full CRUD operations
 - Admin-only write access
 - Fields:
   - amount
@@ -39,33 +39,39 @@ This project simulates a real-world backend with controlled access, structured a
 
 ### 🔍 Record Filtering
 Supports:
-- type filter
-- category search
-- date range filtering
-- pagination
+- type filter  
+- category search  
+- date range filtering  
+- pagination  
 
-Example:
+**Example:**
 
 GET /api/records?type=income&category=salary&startDate=2026-01-01
+
 
 ---
 
 ### 📊 Dashboard & Analytics
 
-Endpoint:
+**Endpoint:**
+
 GET /api/dashboard/summary
 
+
 Includes:
-- Total income & expense
-- Net balance
-- Category-wise breakdown (with %)
-- Monthly trends
-- Recent transactions
+- Total income & expense  
+- Net balance  
+- Category-wise breakdown (with %)  
+- Monthly trends  
+- Recent transactions  
 
 ---
 
 ## 🧠 Architecture
+
+
 Routes → Controllers → Services → Models
+
 
 ### Why this structure?
 - Separation of concerns  
@@ -95,8 +101,18 @@ Routes → Controllers → Services → Models
 ---
 
 ## 📁 Project Structure
-src/ ├── config/ ├── controllers/ ├── middleware/ ├── models/ ├── routes/ ├── services/ └── app.js
+
+src/
+├── config/
+├── controllers/
+├── middleware/
+├── models/
+├── routes/
+├── services/
+└── app.js
+
 server.js
+
 
 ---
 
@@ -131,13 +147,128 @@ server.js
 
 ## 🚀 Future Improvements
 
-- Enhanced analytics (weekly trends, forecasting)
-- Advanced validation layer
-- Performance optimization (caching)
-- Production-level logging
+- Enhanced analytics (weekly trends, forecasting)  
+- Advanced validation layer  
+- Performance optimization (caching)  
+- Production-level logging  
 
 ---
 
-## ✅ Conclusion
+# 🔗 API Endpoints & Testing Guide
 
-This project demonstrates a scalable backend system with role-based access, financial data management, and real-time analytics. It goes beyond basic CRUD by incorporating structured architecture and aggregation logic for practical, real-world applications.
+### Base URL
+
+http://localhost:5000
+
+
+---
+
+## 🔐 Authentication
+
+### Login
+
+POST /api/auth/login
+
+
+**Request Body:**
+  ``json
+{
+  "email": "admin@test.com",
+  "password": "123456"
+}
+
+Response:
+
+{
+  "user": { ... },
+  "token": "JWT_TOKEN"
+}
+
+👉 Save this token for protected routes.
+
+👑 Admin Setup
+
+Default Admin (Seeded):
+
+Email: admin@test.com  
+Password: 123456
+Steps:
+Start server → admin auto-created
+Login using /api/auth/login
+Copy JWT token
+👥 User Management (Admin Only)
+Create User
+POST /api/users
+
+Headers:
+
+Authorization: Bearer <ADMIN_TOKEN>
+Create Analyst:
+{
+  "name": "Analyst One",
+  "email": "analyst@test.com",
+  "password": "123456",
+  "role": "analyst"
+}
+Create Viewer:
+{
+  "name": "Viewer One",
+  "email": "viewer@test.com",
+  "password": "123456",
+  "role": "viewer"
+}
+💰 Financial Records APIs
+Create Record (Admin Only)
+POST /api/records
+
+Headers:
+
+Authorization: Bearer <ADMIN_TOKEN>
+
+Body:
+
+{
+  "amount": 5000,
+  "type": "income",
+  "category": "salary",
+  "notes": "monthly salary"
+}
+Get Records (All Roles)
+GET /api/records
+
+Headers:
+
+Authorization: Bearer <TOKEN>
+
+Query Params:
+
+type
+category
+startDate
+endDate
+page
+limit
+
+Example:
+
+/api/records?type=income&category=salary&page=1
+Update Record (Admin Only)
+PUT /api/records/:id
+Delete Record (Admin Only)
+DELETE /api/records/:id
+📊 Dashboard API
+Get Summary
+GET /api/dashboard/summary
+
+Headers:
+
+Authorization: Bearer <ADMIN or ANALYST TOKEN>
+🧪 Testing Flow
+Login as Admin
+Create Analyst & Viewer
+Add financial records
+Test Analyst access (records + dashboard)
+Test Viewer access (read-only)
+✅ Conclusion
+
+This project demonstrates a scalable backend system with role-based access, financial data management, and real-time ana
