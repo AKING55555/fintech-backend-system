@@ -171,7 +171,7 @@ POST /api/auth/login
 
 
 **Request Body:**
-  ``json
+```json
 {
   "email": "admin@test.com",
   "password": "123456"
