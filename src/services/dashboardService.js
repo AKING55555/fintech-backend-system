@@ -45,7 +45,9 @@ const getSummary = async () => {
     categories[type].push({
       category,
       total,
-      percentage: base ? Number(((total / base) * 100).toFixed(2)) : 0
+      percentage: base
+        ? Number(((total / base) * 100).toFixed(2)) // ✅ FIXED
+        : 0
     });
   });
 
@@ -84,12 +86,28 @@ const getSummary = async () => {
     trendMap[key][type] = item.total;
   });
 
-  const trendArray = Object.values(trendMap);
+  const monthNames = [
+    "Jan","Feb","Mar","Apr","May","Jun",
+    "Jul","Aug","Sep","Oct","Nov","Dec"
+  ];
 
-  // 🔥 RECENT TRANSACTIONS
-  const recent = await Record.find()
+  const trendArray = Object.values(trendMap).map(t => ({
+    month: `${monthNames[t.month - 1]} ${t.year}`, // ✅ formatted
+    income: t.income,
+    expense: t.expense
+  }));
+
+  // 🔥 RECENT TRANSACTIONS (CLEANED)
+  const recentRaw = await Record.find()
     .sort({ createdAt: -1 })
     .limit(5);
+
+  const recent = recentRaw.map(r => {
+    const obj = r.toObject();
+    delete obj.__v;
+    delete obj.createdBy; // ✅ removed
+    return obj;
+  });
 
   return {
     overview: {

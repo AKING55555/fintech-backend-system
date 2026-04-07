@@ -10,7 +10,10 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 const app = express();
 
 // ===== GLOBAL MIDDLEWARE =====
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  credentials: false,
+}));
 app.use(helmet());
 app.use(express.json());
 
